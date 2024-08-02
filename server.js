@@ -1,7 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectToDB = require("./db/db");
-const router = require("./routes/PostRoute");
+const { post } = require("./routes/PostRoute");
+
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/posts", router);
+app.use("/api/posts", post);
 
 connectToDB();
 app.listen(port, () => {
