@@ -11,9 +11,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/posts", router);
+app.use("/api/v1/posts", router);
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("Hi ");
 });
 connectToDB();
 app.listen(port, () => {
