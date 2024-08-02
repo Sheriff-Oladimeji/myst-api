@@ -1,8 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectToDB = require("./db/db");
-const { post } = require("./routes/PostRoute");
-
+const router = require("./routes/PostRoute");
 
 dotenv.config();
 
@@ -12,8 +11,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/posts", post);
-
+app.use("/api/posts", router);
+app.get("/", (req, res) => {
+  res.send("Hello world");
+});
 connectToDB();
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

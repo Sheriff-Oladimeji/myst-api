@@ -3,14 +3,14 @@ const Post = require("../models/Post.model")
 
 
 const getAllPost = async (req, res) => {
-    try {
-        const posts = Post.find()
-        res.status(200).json({status: "Success", posts})
-        
-    } catch (error) {
-        throw error
-    }
-}
+  try {
+    const posts = await Post.find(); 
+    res.json(posts); 
+  } catch (error) {
+    console.error(error); 
+    res.status(500).send("Internal Server Error"); 
+  }
+};
 
 const createPost = async (req, res) => {
     try {
