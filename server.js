@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const axios = require("axios");
 const connectToDB = require("./db/db");
+const Post = require("./models/Post.model");
 const router = require("./routes/PostRoute");
 
 dotenv.config();
@@ -15,7 +17,10 @@ app.use("/api/v1/posts", router);
 app.get("/", (req, res) => {
   res.send("Hi ");
 });
+
+// Connect to the database
 connectToDB();
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
