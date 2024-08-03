@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1/posts", router);
+app.use("/api/v1/quotes", router);
 app.get("/", (req, res) => {
   res.send("Hi ");
 });
