@@ -14,9 +14,9 @@ const getAllPost = async (req, res) => {
 
 const createPost = async (req, res) => {
     try {
-        const { quote, author } = req.body
+        const { quote, author , tags, image, category} = req.body
         if (quote && author) {
-            const post = await Post.create({ quote, author })
+            const post = await Post.create({ quote, author , tags, image, category})
             await post.save()
             res.send("Post Created successfully")
         }
