@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
   res.send("Hi ");
 });
 
-// Connect to the database
+
 connectToDB();
 
 app.listen(port, () => {
