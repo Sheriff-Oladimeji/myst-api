@@ -16,9 +16,9 @@ const createPost = async (req, res) => {
     if (quote && author) {
       const post = await Post.create({ quote, author, tags, image, category });
       await post.save();
-      res.send("Post Created successfully"); 
+      res.json({ message: "Post Created successfully" }); 
     } else {
-      res.send("Please add a quote and an author");
+      res.json({message:"Please add a quote and an author" })
     }
   } catch (error) {
      console.error(error);
