@@ -49,4 +49,4 @@ const getRandomPost = async (req, res) => {
   }
 }
 
-module.exports = { getAllPost, createPost , getSinglePost};
+module.exports = { getAllPost, createPost , getSinglePost, getRandomPost};
