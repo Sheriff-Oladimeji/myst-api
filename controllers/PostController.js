@@ -38,15 +38,29 @@ const getSinglePost = async (req, res) => {
   }
 };
 
+
+let quoteOfTheDay = null;
+let lastUpdated = null;
+
+
 const getRandomPost = async (req, res) => {
-  try {
-    const posts = await Post.find()
-    let random = posts[Math.floor(Math.random() * posts.length)]
-    res.json(random)
-  } catch (error) {
-    console.error(error);
-    res.status(404).send("Couldn't find post");
-  }
+ try {
+   const now = new Date();
+   if (
+     !quoteOfTheDay ||
+     !lastUpdated ||
+     now - lastUpdated > 24 * 60 * 60 * 1000
+   ) {
+     const posts = await Post.find();
+     quoteOfTheDay = posts[Math.floor(Math.random() * posts.length)];
+     lastUpdated = now;
+   }
+
+   res.json(quoteOfTheDay);
+ } catch (error) {
+   console.error(error);
+   res.status(404).send("Couldn't find post");
+ }
 }
 
 module.exports = { getAllPost, createPost , getSinglePost, getRandomPost};
