@@ -23,11 +23,14 @@ app.use(cors());
 
 app.use("/api/v1/quotes", router);
 app.get("/", (req, res) => {
-  res.send("Hi ");
+  res.send("welcome to our api");
 });
 
 
 connectToDB();
+
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

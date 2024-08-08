@@ -38,4 +38,15 @@ const getSinglePost = async (req, res) => {
   }
 };
 
+const getRandomPost = async (req, res) => {
+  try {
+    const posts = await Post.find()
+    let random = posts[Math.floor(Math.random() * posts.length)]
+    res.json(random)
+  } catch (error) {
+    console.error(error);
+    res.status(404).send("Couldn't find post");
+  }
+}
+
 module.exports = { getAllPost, createPost , getSinglePost};
