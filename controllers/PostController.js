@@ -3,6 +3,7 @@ const Post = require("../models/Post.model");
 const getAllPost = async (req, res) => {
   try {
     const posts = await Post.find();
+    posts.reverse()
     res.json(posts);
   } catch (error) {
     console.error(error);
