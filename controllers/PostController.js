@@ -41,8 +41,12 @@ const getSinglePost = async (req, res) => {
 
 const getAllCategories = async (req, res) => {
   try {
- const categories = await Post.distinct("category");
- res.json(categories);
+    const categoryCounts = await Post.aggregate([
+      { $group: { _id: "$category", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]);
+
+    res.json(categoryCounts);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -61,7 +65,7 @@ const getRandomPost = async (req, res) => {
      !lastUpdated ||
      now - lastUpdated > 24 * 60 * 60 * 1000
    ) {
-     const posts = await Post.find({ category: "motivational" });
+     const posts = await Post.find();
      quoteOfTheDay = posts[Math.floor(Math.random() * posts.length)];
      lastUpdated = now;
    }
