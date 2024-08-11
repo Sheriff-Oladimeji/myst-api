@@ -79,10 +79,11 @@ const getRandomPost = async (req, res) => {
     if (
       !quoteOfTheDay ||
       !lastUpdated ||
-      now - lastUpdated > 24 * 60 * 60 * 1000
+      now - lastUpdated >= 24 * 60 * 60 * 1000
     ) {
-      const posts = await Post.find();
-      quoteOfTheDay = posts[Math.floor(Math.random() * posts.length)];
+      const count = await Post.countDocuments();
+      const randomIndex = Math.floor(Math.random() * count);
+      quoteOfTheDay = await Post.findOne().skip(randomIndex);
       lastUpdated = now;
     }
 
