@@ -6,6 +6,7 @@ const Post = require("./models/Post.model");
 const router = require("./routes/PostRoute");
 const cors = require('cors');
 const helmet = require("helmet");
+
 dotenv.config();
 
 const port = process.env.PORT || 5000;
