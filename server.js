@@ -5,14 +5,14 @@ const connectToDB = require("./db/db");
 const Post = require("./models/Post.model");
 const router = require("./routes/PostRoute");
 const cors = require('cors');
-
+const helmet = require("helmet");
 dotenv.config();
 
 const port = process.env.PORT || 5000;
 const app = express();
 
 
-
+app.use(helmet())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((err, req, res, next) => {
