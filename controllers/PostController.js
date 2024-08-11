@@ -99,21 +99,42 @@ let lastUpdated = null;
 const getRandomPost = async (req, res) => {
   try {
     const now = new Date();
+    const categories = [
+      "inspirational",
+      "motivational",
+      "freedom",
+      "wisdom",
+      "religion",
+      "love",
+    ];
+
     if (
       !quoteOfTheDay ||
       !lastUpdated ||
       now - lastUpdated >= 24 * 60 * 60 * 1000
     ) {
-      const count = await Post.countDocuments();
+      const count = await Post.countDocuments({
+        category: { $regex: new RegExp(categories.join("|"), "i") },
+      });
+
+      if (count === 0) {
+        return res
+          .status(404)
+          .send("No posts found in the specified categories");
+      }
+
       const randomIndex = Math.floor(Math.random() * count);
-      quoteOfTheDay = await Post.findOne().skip(randomIndex);
+      quoteOfTheDay = await Post.findOne({
+        category: { $regex: new RegExp(categories.join("|"), "i") },
+      }).skip(randomIndex);
+
       lastUpdated = now;
     }
 
     res.json(quoteOfTheDay);
   } catch (error) {
     console.error(error);
-    res.status(404).send("Couldn't find post");
+    res.status(500).send("Internal Server Error");
   }
 };
 
