@@ -1,6 +1,6 @@
 const Post = require("../models/Post.model");
 
-const getAllPost = async (req, res) => {
+const getAllQuotes = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -26,7 +26,7 @@ const getAllPost = async (req, res) => {
   }
 };
 
-const createPost = async (req, res) => {
+const createQuote = async (req, res) => {
   try {
     const { quote, author, category } = req.body;
     if (quote && author) {
@@ -58,7 +58,7 @@ const getAllCategories = async (req, res) => {
   }
 };
 
-const getPostsByCategory = async (req, res) => {
+const getQuotesByCategory = async (req, res) => {
   try {
     const category = req.params.category.toLowerCase();
     const page = parseInt(req.query.page) || 1;
@@ -96,7 +96,7 @@ const getPostsByCategory = async (req, res) => {
 let quoteOfTheDay = null;
 let lastUpdated = null;
 
-const getRandomPost = async (req, res) => {
+const getQuoteOfTheDay = async (req, res) => {
   try {
     const now = new Date();
     const categories = [
@@ -138,7 +138,7 @@ const getRandomPost = async (req, res) => {
   }
 };
 
-const getSinglePost = async (req, res) => {
+const getSingleQuote = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (post) {
@@ -155,10 +155,10 @@ const getSinglePost = async (req, res) => {
 
 
 module.exports = {
-  getAllPost,
-  createPost,
-  getSinglePost,
-  getRandomPost,
+  getAllQuotes,
+  createQuote,
+  getSingleQuote,
+ getQuoteOfTheDay,
   getAllCategories,
-  getPostsByCategory,
+  getQuotesByCategory,
 };

@@ -1,13 +1,20 @@
 const express = require("express");
-const { getAllPost, createPost, getSinglePost, getRandomPost, getAllCategories, getPostsByCategory } = require("../controllers/PostController");
+const {
+  getAllCategories,
+  getAllQuotes,
+  createQuote,
+  getSingleQuote,
+  getQuotesByCategory,
+  getQuoteOfTheDay,
+} = require("../controllers/PostController");
 const router = express.Router();
 
-router.get("/", getAllPost);
-router.post("/", createPost);
+router.get("/", getAllQuotes);
+router.post("/", createQuote);
 router.get("/categories", getAllCategories);
-router.get("/qod", getRandomPost )
-router.get("/:id", getSinglePost)
+router.get("/qod", getQuoteOfTheDay);
+router.get("/:id", getSingleQuote);
 
-router.get("/categories/:category", getPostsByCategory);
+router.get("/categories/:category", getQuotesByCategory);
 
 module.exports = router;
