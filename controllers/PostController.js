@@ -42,8 +42,6 @@ const createQuote = async (req, res) => {
   }
 };
 
-
-
 const getAllCategories = async (req, res) => {
   try {
     const categoryCounts = await Post.aggregate([
@@ -52,6 +50,19 @@ const getAllCategories = async (req, res) => {
     ]);
     console.log(`categories : ${categoryCounts.length}`);
     res.json(categoryCounts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const getAllAuthors = async (req, res) => {
+  try {
+    const authors = await Post.aggregate([
+      { $group: { _id: { $toLower: "$author" }, count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]);
+    res.json(authors);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -86,6 +97,41 @@ const getQuotesByCategory = async (req, res) => {
       });
     } else {
       res.status(404).send("No posts found for this category");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const getAuthorQuotes = async (req, res) => {
+  try {
+    const author = req.params.author.toLowerCase();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalPosts = await Post.countDocuments({
+      author: { $regex: new RegExp("^" + author + "$", "i") },
+    });
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    const posts = await Post.find({
+      author: { $regex: new RegExp("^" + author + "$", "i") },
+    })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    if (posts.length > 0) {
+      res.json({
+        posts,
+        currentPage: page,
+        totalPages,
+        totalPosts,
+      });
+    } else {
+      res.status(404).send("No posts found for this author");
     }
   } catch (error) {
     console.error(error);
@@ -152,13 +198,13 @@ const getSingleQuote = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   getAllQuotes,
   createQuote,
   getSingleQuote,
- getQuoteOfTheDay,
+  getQuoteOfTheDay,
   getAllCategories,
   getQuotesByCategory,
+  getAllAuthors,
+  getAuthorQuotes
 };
