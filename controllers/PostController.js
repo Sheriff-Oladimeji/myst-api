@@ -138,6 +138,51 @@ const getAuthorQuotes = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+const searchQuotes = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    if (!q) {
+      return res.status(400).json({ message: "Search query is required" });
+    }
+
+    const searchRegex = new RegExp(q, "i");
+
+    const totalPosts = await Post.countDocuments({
+      $or: [
+        { quote: searchRegex },
+        { author: searchRegex },
+        { category: searchRegex },
+      ],
+    });
+
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    const posts = await Post.find({
+      $or: [
+        { quote: searchRegex },
+        { author: searchRegex },
+        { category: searchRegex },
+      ],
+    })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      posts,
+      currentPage: page,
+      totalPages,
+      totalPosts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 let quoteOfTheDay = null;
 let lastUpdated = null;
@@ -206,5 +251,6 @@ module.exports = {
   getAllCategories,
   getQuotesByCategory,
   getAllAuthors,
-  getAuthorQuotes
+  getAuthorQuotes,
+  searchQuotes
 };
