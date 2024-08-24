@@ -11,8 +11,17 @@ dotenv.config();
 
 const port = process.env.PORT || 5000;
 const app = express();
+ const corsOptions = {
+   origin: [
+     "https://qlip.vercel.app",
+     "http://localhost:8000",
+     "http://localhost:3000",
+   ],
+   optionsSuccessStatus: 200,
+ };
 
 
+app.use(cors(corsOptions));
 app.use(helmet())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,7 +29,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });
-app.use(cors());
+
 
 app.use("/api/v1/quotes", router);
 app.get("/", (req, res) => {
