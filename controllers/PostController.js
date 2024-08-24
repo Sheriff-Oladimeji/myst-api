@@ -30,11 +30,21 @@ const createQuote = async (req, res) => {
   try {
     const { quote, author, category } = req.body;
     if (quote && author) {
+      const existingQuote = await Post.findOne({
+        quote: { $regex: new RegExp(`^${quote}$`, "i") },
+      });
+
+      if (existingQuote) {
+        return res
+          .status(409)
+          .json({ message: "This quote already exists in the database." });
+      }
+
       const post = await Post.create({ quote, author, category });
       await post.save();
-      res.json({ message: "Post Created successfully" });
+      res.status(201).json({ message: "Quote created successfully" });
     } else {
-      res.json({ message: "Please add a quote and an author" });
+      res.status(400).json({ message: "Please add a quote and an author" });
     }
   } catch (error) {
     console.error(error);
