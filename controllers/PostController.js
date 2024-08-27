@@ -1,5 +1,6 @@
 const Post = require("../models/Post.model");
 
+
 const getAllQuotes = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -42,6 +43,8 @@ const createQuote = async (req, res) => {
 
       const post = await Post.create({ quote, author, category });
       await post.save();
+    
+      
       res.status(201).json({ message: "Quote created successfully" });
     } else {
       res.status(400).json({ message: "Please add a quote and an author" });
