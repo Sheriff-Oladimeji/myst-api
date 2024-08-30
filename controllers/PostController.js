@@ -59,7 +59,7 @@ const getAllCategories = async (req, res) => {
   try {
     const categoryCounts = await Post.aggregate([
       { $group: { _id: { $toLower: "$category" }, count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
+      { $sort: { _id: 1 } }, 
     ]);
     console.log(`categories : ${categoryCounts.length}`);
     res.json(categoryCounts);
@@ -73,7 +73,7 @@ const getAllAuthors = async (req, res) => {
   try {
     const authors = await Post.aggregate([
       { $group: { _id: { $toLower: "$author" }, count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
+      { $sort: { _id: 1 } },
     ]);
     res.json(authors);
   } catch (error) {
